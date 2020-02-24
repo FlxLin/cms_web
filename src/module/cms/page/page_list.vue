@@ -45,13 +45,34 @@
       </el-table-column>
       <el-table-column prop="pageCreateTime" label="创建时间" width="300" >
       </el-table-column>
-      <el-table-column label="操作" width="80">
-      <template slot-scope="page">
+      <!--编辑-->
+      <el-table-column label="操作" width="70">
+        <template slot-scope="page">
         <el-button
         size="small"type="text"
         @click="edit(page.row.pageId)">编辑
         </el-button>
       </template>
+      </el-table-column>
+      <!--删除-->
+      <el-table-column label="操作" width="70">
+        <template slot-scope="page">
+
+          <el-button
+            size="small"type="text"
+            @click="del(page.row.pageId)">删除
+          </el-button>
+        </template>
+
+      </el-table-column>
+      <!--页面预览-->
+      <el-table-column label="操作" width="100">
+        <template slot-scope="page">
+          <el-button
+            size="small"type="text"
+            @click="preview(page.row.pageId)">页面预览
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination
@@ -85,23 +106,47 @@
     methods: {
       query: function () {
         //调用服务端接口，回调then函数，范围结果为res。
-
         cmsApi.page_list(this.params.page, this.params.size, this.params).then((res) => {
           debugger
           this.list = res.queryResult.list;
           this.total = res.queryResult.total;
         })
       },
+
       PageChange: function (page) {//形参page代表当前页，系统自动传入
         this.params.page = page;
         this.query();
       },
+
       edit: function (pageId) {
         //打开修改页面
         this.$router.push({
-          path:'/cms/page/edit/' + pageId
+          path:'/cms/page/edit/' + pageId,
+          query:{
+            page: this.params.page,
+            size: this.params.size
+          }
         })
+      },
+
+      del: function (pageId) {
+        this.$confirm('确认删除吗？', '提示', {}).then(() => {
+          //删除页面
+          cmsApi.page_del(pageId).then((res)=>{
+            if(res.success ){
+              this.$message.success("删除成功")
+              this.query()
+            }else {
+              this.$message.error("删除失败")
+            }
+          })
+        })
+      },
+
+      preview: function (pageId) {
+        window.open("http://127.0.0.1/cms/preview/" + pageId)
       }
+
     },
 
     created() {

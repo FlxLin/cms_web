@@ -2,6 +2,7 @@ import Home from '@/module/home/page/home.vue';
 import Page_list from '@/module/cms/page/page_list.vue';
 import Page_add from '@/module/cms/page/page_add.vue';
 import Page_edit from '@/module/cms/page/page_edit.vue';
+
 export default [{
     path: '/',
     component: Home,

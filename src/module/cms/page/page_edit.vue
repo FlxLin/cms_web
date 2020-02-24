@@ -111,6 +111,7 @@
           }
         })
       },
+
       editSubmit(){
         this.$refs.pageForm.validate((valid) => {
           if (valid) {
