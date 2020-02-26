@@ -74,6 +74,15 @@
           </el-button>
         </template>
       </el-table-column>
+      <!--页面发布-->
+      <el-table-column label="操作" width="100">
+        <template slot-scope="page">
+          <el-button
+            size="small"type="text"
+            @click="pagePost(page.row.pageId)">页面发布
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
         layout="prev, pager, next"
@@ -121,8 +130,8 @@
       edit: function (pageId) {
         //打开修改页面
         this.$router.push({
-          path:'/cms/page/edit/' + pageId,
-          query:{
+          path: '/cms/page/edit/' + pageId,
+          query: {
             page: this.params.page,
             size: this.params.size
           }
@@ -132,11 +141,11 @@
       del: function (pageId) {
         this.$confirm('确认删除吗？', '提示', {}).then(() => {
           //删除页面
-          cmsApi.page_del(pageId).then((res)=>{
-            if(res.success ){
+          cmsApi.page_del(pageId).then((res) => {
+            if (res.success) {
               this.$message.success("删除成功")
               this.query()
-            }else {
+            } else {
               this.$message.error("删除失败")
             }
           })
@@ -145,7 +154,22 @@
 
       preview: function (pageId) {
         window.open("http://127.0.0.1/cms/preview/" + pageId)
-      }
+      },
+
+      pagePost: function (pageId) {
+        this.$confirm('确认发布该页面吗?', '提示', {}).then(() => {
+          cmsApi.page_postPage(pageId).then((res) => {
+            if (res.success) {
+              console.log('发布页面id=' + pageId);
+              this.$message.success('发布成功，请稍后查看结果');
+            } else {
+              this.$message.error('发布失败');
+            }
+          });
+        }).catch(() => {
+        });
+
+      },
 
     },
 

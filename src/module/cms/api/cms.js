@@ -27,3 +27,7 @@ export const page_del = (pageId)=>{
   return http.requestDelete(apiUrl+"/cms/page/del/" + pageId);
 }
 
+export const page_postPage= pageId => {
+  return http.requestPost(apiUrl+'/cms/page/postPage/'+pageId)
+}
+
